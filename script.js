@@ -1,217 +1,212 @@
 // ================= CẤU HÌNH GITHUB =================
 const githubConfig = {
-    USERNAME: "phamlong6677t-create",
-    REPO: "TFLv2",
-    TOKEN: "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",
-    FILE_PATH: "game.json",
-    get API_URL() {
-        return `https://api.github.com/repos/${this.USERNAME}/${this.REPO}/contents/${this.FILE_PATH}`;
-    }
+  username: "phamlong6677t-create",
+  repo: "TFLv2",
+  token: "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", // THAY THẾ BẰNG TOKEN THỰC
+  path: "game.json",
+  branch: "main",
+  get apiUrl() {
+    return `https://api.github.com/repos/${this.username}/${this.repo}/contents/${this.path}?ref=${this.branch}`;
+  }
 };
 
-// ================= BIẾN TOÀN CỤC =================
-let currentGames = { "all": [] };
-let currentTab = "all";
+// ================= LỚP QUẢN LÝ DỮ LIỆU =================
+class DataManager {
+  constructor() {
+    this.cachedData = null;
+  }
 
-// ================= KHỞI TẠO =================
+  // Lấy dữ liệu từ GitHub
+  async fetchData() {
+    try {
+      const response = await fetch(githubConfig.apiUrl, {
+        headers: {
+          'Authorization': `Bearer ${githubConfig.token}`,
+          'Accept': 'application/vnd.github.v3+json'
+        }
+      });
+
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+
+      const data = await response.json();
+      this.cachedData = JSON.parse(atob(data.content.replace(/\s/g, '')));
+      return this.cachedData;
+    } catch (error) {
+      console.error("Fetch error:", error);
+      throw error;
+    }
+  }
+
+  // Cập nhật dữ liệu lên GitHub
+  async updateData(newData) {
+    try {
+      const current = await this.fetchData();
+      const sha = await this.getFileSHA();
+
+      const mergedData = this.deepMerge(current, newData);
+      mergedData.metadata = {
+        lastUpdated: new Date().toISOString(),
+        version: this.incrementVersion(current.metadata.version),
+        totalItems: this.countItems(mergedData)
+      };
+
+      const response = await fetch(githubConfig.apiUrl, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${githubConfig.token}`,
+          'Content-Type': 'application/json',
+          'Accept': 'application/vnd.github.v3+json'
+        },
+        body: JSON.stringify({
+          message: `Data update - ${new Date().toLocaleString()}`,
+          content: btoa(unescape(encodeURIComponent(JSON.stringify(mergedData)))),
+          sha: sha,
+          branch: githubConfig.branch
+        })
+      });
+
+      if (!response.ok) throw new Error(await response.text());
+      return await response.json();
+    } catch (error) {
+      console.error("Update error:", error);
+      throw error;
+    }
+  }
+
+  // ================= PHƯƠNG THỨC HỖ TRỢ =================
+  async getFileSHA() {
+    const response = await fetch(githubConfig.apiUrl, {
+      headers: {
+        'Authorization': `Bearer ${githubConfig.token}`,
+        'Accept': 'application/vnd.github.v3+json'
+      }
+    });
+    const data = await response.json();
+    return data.sha;
+  }
+
+  deepMerge(target, source) {
+    for (const key in source) {
+      if (source[key] instanceof Object && key in target) {
+        Object.assign(source[key], this.deepMerge(target[key], source[key]);
+      }
+    }
+    return { ...target, ...source };
+  }
+
+  incrementVersion(version) {
+    const parts = version.split('.');
+    parts[2] = (parseInt(parts[2]) + 1;
+    return parts.join('.');
+  }
+
+  countItems(data) {
+    return (
+      data.home.embedVideos.length +
+      data.home.featuredGames.length +
+      data.links.length
+    );
+  }
+
+  // ================= THAO TÁC DỮ LIỆU =================
+  async addVideo(videoData) {
+    if (!videoData.url) throw new Error("Video URL is required");
+    
+    const newVideo = {
+      id: `vid_${Date.now()}`,
+      createdAt: new Date().toISOString(),
+      ...videoData
+    };
+
+    return this.updateData({
+      home: {
+        embedVideos: [newVideo]
+      }
+    });
+  }
+
+  async addGame(gameData) {
+    if (!gameData.title || !gameData.download) {
+      throw new Error("Title and download URL are required");
+    }
+
+    const newGame = {
+      id: `game_${Date.now()}`,
+      createdAt: new Date().toISOString(),
+      category: gameData.category || "uncategorized",
+      ...gameData
+    };
+
+    return this.updateData({
+      home: {
+        featuredGames: [newGame]
+      }
+    });
+  }
+
+  async addLink(linkData) {
+    if (!linkData.url || !linkData.title) {
+      throw new Error("URL and title are required");
+    }
+
+    const newLink = {
+      id: `link_${Date.now()}`,
+      createdAt: new Date().toISOString(),
+      icon: linkData.icon || "https://cdn-icons-png.flaticon.com/512/2965/2965300.png",
+      ...linkData
+    };
+
+    return this.updateData({
+      links: [newLink]
+    });
+  }
+}
+
+// ================= KHỞI TẠO & SỬ DỤNG =================
 document.addEventListener('DOMContentLoaded', async () => {
-    await loadGames();
-    renderTabs();
-    renderGames();
-    setupEventListeners();
+  const dataManager = new DataManager();
+
+  // Ví dụ sử dụng:
+  try {
+    // Thêm video mới
+    await dataManager.addVideo({
+      url: "https://www.youtube.com/embed/NEW_VIDEO_ID",
+      title: "Video hướng dẫn mới",
+      thumbnail: "https://i.ytimg.com/vi/NEW_VIDEO_ID/maxresdefault.jpg",
+      duration: "10:25"
+    });
+
+    // Thêm game mới
+    await dataManager.addGame({
+      title: "Game Mobile Mới",
+      download: "https://example.com/download/game.apk",
+      image: "https://example.com/game-thumbnail.jpg",
+      description: "Phiên bản mobile mới nhất",
+      category: "game-mobile"
+    });
+
+    // Thêm link mới
+    await dataManager.addLink({
+      title: "Tài liệu hướng dẫn",
+      url: "https://example.com/docs",
+      category: "document"
+    });
+
+    console.log("Cập nhật dữ liệu thành công!");
+  } catch (error) {
+    console.error("Lỗi khi cập nhật:", error);
+  }
 });
 
-// ================= HÀM CHÍNH =================
-
-// Tải dữ liệu từ GitHub
-async function loadGames() {
-    try {
-        const response = await fetch(githubConfig.API_URL, {
-            headers: { 'Authorization': `Bearer ${githubConfig.TOKEN}` }
-        });
-
-        if (response.ok) {
-            const data = await response.json();
-            const parsedData = JSON.parse(decodeURIComponent(escape(atob(data.content))));
-            currentGames = parsedData;
-        } else {
-            console.warn("Không tải được dữ liệu từ GitHub, khởi tạo rỗng.");
-            currentGames = { "all": [] };
-        }
-    } catch (error) {
-        console.error("Lỗi tải dữ liệu:", error);
-        currentGames = { "all": [] };
-    }
+// ================= UTILITY FUNCTIONS =================
+function generateUniqueID(prefix) {
+  return `${prefix}_${Date.now()}_${Math.floor(Math.random() * 1000)}`;
 }
 
-// Lưu dữ liệu lên GitHub
-async function saveGames() {
-    try {
-        // Lấy SHA file hiện tại
-        const shaResponse = await fetch(githubConfig.API_URL, {
-            headers: { 'Authorization': `Bearer ${githubConfig.TOKEN}` }
-        });
-        const sha = shaResponse.ok ? (await shaResponse.json()).sha : null;
-
-        const contentEncoded = btoa(unescape(encodeURIComponent(JSON.stringify(currentGames))));
-
-        const response = await fetch(githubConfig.API_URL, {
-            method: 'PUT',
-            headers: {
-                'Authorization': `Bearer ${githubConfig.TOKEN}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                message: `Cập nhật lúc ${new Date().toISOString()}`,
-                content: contentEncoded,
-                sha
-            })
-        });
-
-        return response.ok;
-    } catch (error) {
-        console.error("Lỗi lưu dữ liệu:", error);
-        return false;
-    }
+function validateYouTubeUrl(url) {
+  return /^(https?\:\/\/)?(www\.)?(youtube\.com|youtu\.?be)\/.+$/.test(url);
 }
 
-// Thêm tab mới
-async function addTab(tabName) {
-    if (!tabName.trim()) return false;
-    if (!currentGames[tabName]) {
-        currentGames[tabName] = [];
-        if (await saveGames()) {
-            renderTabs();
-            return true;
-        }
-    }
-    return false;
-}
-
-// Thêm game mới
-async function addGame(gameData) {
-    if (!gameData.title.trim() || !gameData.link.trim()) return false;
-
-    if (!currentGames[gameData.tab]) {
-        currentGames[gameData.tab] = [];
-    }
-
-    currentGames[gameData.tab].push(gameData);
-    currentGames.all.push(gameData);
-
-    if (await saveGames()) {
-        renderGames();
-        return true;
-    }
-    return false;
-}
-
-// ================= HÀM HIỂN THỊ =================
-function renderTabs() {
-    const tabContainer = document.getElementById('tabContainer');
-    tabContainer.innerHTML = '';
-
-    // Tab mặc định
-    const allTab = document.createElement('div');
-    allTab.className = 'tab' + (currentTab === "all" ? ' active' : '');
-    allTab.dataset.tab = "all";
-    allTab.textContent = "Tất cả";
-    allTab.addEventListener('click', () => {
-        currentTab = "all";
-        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-        allTab.classList.add('active');
-        renderGames();
-    });
-    tabContainer.appendChild(allTab);
-
-    // Các tab khác
-    Object.keys(currentGames).forEach(tab => {
-        if (tab !== "all") {
-            const tabElement = document.createElement('div');
-            tabElement.className = 'tab' + (currentTab === tab ? ' active' : '');
-            tabElement.dataset.tab = tab;
-            tabElement.textContent = tab;
-            tabElement.addEventListener('click', () => {
-                currentTab = tab;
-                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-                tabElement.classList.add('active');
-                renderGames();
-            });
-            tabContainer.appendChild(tabElement);
-        }
-    });
-}
-
-function renderGames() {
-    const container = document.getElementById('gamesContainer');
-    const gamesToShow = currentTab === 'all' ? currentGames.all : currentGames[currentTab] || [];
-
-    if (gamesToShow.length === 0) {
-        container.innerHTML = `<p>Không có game nào trong mục này.</p>`;
-        return;
-    }
-
-    container.innerHTML = gamesToShow.map(game => `
-        <div class="game-card">
-            <h3>${game.title}</h3>
-            <p>${game.description || ""}</p>
-            <a href="${game.link}" target="_blank">Tải về</a>
-        </div>
-    `).join('');
-}
-
-// ================= XỬ LÝ SỰ KIỆN =================
-function setupEventListeners() {
-    const gameModal = document.getElementById('gameModal');
-    const tabModal = document.getElementById('tabModal');
-
-    // Mở modal thêm game
-    document.getElementById('addGameBtn').addEventListener('click', () => {
-        const tabSelect = document.getElementById('gameTab');
-        tabSelect.innerHTML = Object.keys(currentGames)
-            .filter(tab => tab !== "all")
-            .map(tab => `<option value="${tab}">${tab}</option>`)
-            .join('');
-        gameModal.style.display = 'flex';
-    });
-
-    // Lưu game mới
-    document.getElementById('saveGameBtn').addEventListener('click', async () => {
-        const gameData = {
-            title: document.getElementById('gameTitle').value,
-            description: document.getElementById('gameDescription').value,
-            link: document.getElementById('gameLink').value,
-            tab: document.getElementById('gameTab').value
-        };
-        if (await addGame(gameData)) {
-            gameModal.style.display = 'none';
-        }
-    });
-
-    // Mở modal thêm tab
-    document.getElementById('addTabBtn').addEventListener('click', () => {
-        tabModal.style.display = 'flex';
-    });
-
-    // Lưu tab mới
-    document.getElementById('saveTabBtn').addEventListener('click', async () => {
-        const tabName = document.getElementById('tabName').value;
-        if (await addTab(tabName)) {
-            tabModal.style.display = 'none';
-        }
-    });
-
-    // Đồng bộ dữ liệu
-    document.getElementById('syncBtn').addEventListener('click', async () => {
-        await loadGames();
-        renderTabs();
-        renderGames();
-    });
-
-    // Đóng modal khi click ngoài
-    [gameModal, tabModal].forEach(modal => {
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) modal.style.display = 'none';
-        });
-    });
-}
+function formatDate(date = new Date()) {
+  return date.toISOString();
+          }
