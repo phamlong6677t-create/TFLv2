@@ -1,9 +1,45 @@
 {
   "home": {
-    "embedVideos": [],
-    "featuredGames": []
+    "embedVideos": [
+      {
+        "id": "vid_001",
+        "url": "https://www.youtube.com/embed/6zzQOst1OoU",
+        "title": "Hướng dẫn cài đặt Roblox Lite PC",
+        "thumbnail": "https://i.ytimg.com/vi/6zzQOst1OoU/maxresdefault.jpg",
+        "duration": "5:30",
+        "createdAt": "2023-11-20T10:00:00Z"
+      }
+    ],
+    "featuredGames": [
+      {
+        "id": "game_001",
+        "title": "Roblox Lite PC V1",
+        "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRkupXop9fhaLMR4SFhL5BlJvCoPxHr7-cDu7ga-PE5lw&s",
+        "download": "https://www.mediafire.com/file/dobyda1bzd4swzu/file+fixlag+rbl+pc+v1.rar/file",
+        "description": "Phiên bản giảm lag cho PC",
+        "category": "game-pc",
+        "version": "1.0.0",
+        "createdAt": "2023-11-20T10:05:00Z"
+      }
+    ]
   },
-  "links": [],
-  "all": [],
-  "tabs": {}
+  "links": [
+    {
+      "id": "link_001",
+      "title": "Download Roblox Lite PC",
+      "url": "https://www.mediafire.com/file/dobyda1bzd4swzu/file+fixlag+rbl+pc+v1.rar/file",
+      "icon": "https://cdn-icons-png.flaticon.com/512/2965/2965300.png",
+      "category": "download",
+      "createdAt": "2023-11-20T10:10:00Z"
+    }
+  ],
+  "categories": {
+    "game-pc": "Game PC",
+    "download": "Tải về"
+  },
+  "metadata": {
+    "lastUpdated": "2023-11-20T12:00:00Z",
+    "version": "1.1.0",
+    "totalItems": 3
+  }
 }
