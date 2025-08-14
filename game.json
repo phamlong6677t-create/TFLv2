@@ -1,11 +1,9 @@
 {
   "home": {
-    "embedVideos": [
-
-    ]
+    "embedVideos": [],
+    "featuredGames": []
   },
-  
- 
-    }
-  ]
+  "links": [],
+  "all": [],
+  "tabs": {}
 }
