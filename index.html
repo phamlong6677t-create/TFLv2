@@ -1,0 +1,1797 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>UgPhone - VPN & Gaming</title>
+    <style>
+        :root {
+            /* Màu mặc định (Đỏ) */
+            --primary-color: #ff4757;
+            --primary-light: #ff6b81;
+            --bg-color: #ffffff;
+            --text-color: #333333;
+            --card-bg: #ffffff;
+            --border-color: #e0e0e0;
+            --tab-bar-bg: #ffffff;
+            --tab-text: #666666;
+            --tab-active: #ff4757;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --input-bg: #f5f5f5;
+            --success-color: #4CAF50;
+            --theme-name: "default";
+            --background-image: none;
+        }
+
+        /* Chế độ tối đỏ */
+        .dark-mode-red {
+            --primary-color: #ff6b81;
+            --primary-light: #ff8fa3;
+            --bg-color: #121212;
+            --text-color: #f5f5f5;
+            --card-bg: #1e1e1e;
+            --border-color: #333333;
+            --tab-bar-bg: #1e1e1e;
+            --tab-text: #aaaaaa;
+            --tab-active: #ff6b81;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            --input-bg: #2d2d2d;
+            --success-color: #81C784;
+            --theme-name: "red";
+        }
+
+        /* Chế độ tối xanh dương */
+        .dark-mode-blue {
+            --primary-color: #4b7bec;
+            --primary-light: #6c8ef5;
+            --bg-color: #0a192f;
+            --text-color: #e6f1ff;
+            --card-bg: #172a45;
+            --border-color: #303f60;
+            --tab-bar-bg: #172a45;
+            --tab-text: #a8b2d1;
+            --tab-active: #4b7bec;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            --input-bg: #1f3a6b;
+            --success-color: #81C784;
+            --theme-name: "blue";
+        }
+
+        /* Chế độ tối tím */
+        .dark-mode-purple {
+            --primary-color: #9c88ff;
+            --primary-light: #b29fff;
+            --bg-color: #1a1a2e;
+            --text-color: #e2e2ff;
+            --card-bg: #16213e;
+            --border-color: #3d3d6b;
+            --tab-bar-bg: #16213e;
+            --tab-text: #c9c9e9;
+            --tab-active: #9c88ff;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            --input-bg: #2a2a4a;
+            --success-color: #81C784;
+            --theme-name: "purple";
+        }
+
+        /* Chế độ tối xanh nước biển */
+        .dark-mode-teal {
+            --primary-color: #00cec9;
+            --primary-light: #55efc4;
+            --bg-color: #0d324d;
+            --text-color: #dfe6e9;
+            --card-bg: #1b4b6a;
+            --border-color: #2d7a8c;
+            --tab-bar-bg: #1b4b6a;
+            --tab-text: #b2d8d8;
+            --tab-active: #00cec9;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            --input-bg: #1a5a7a;
+            --success-color: #81C784;
+            --theme-name: "teal";
+        }
+
+        /* Chế độ tối xám nhạt */
+        .dark-mode-gray {
+            --primary-color: #a4b0be;
+            --primary-light: #dfe4ea;
+            --bg-color: #2f3542;
+            --text-color: #f1f2f6;
+            --card-bg: #3d4455;
+            --border-color: #57606f;
+            --tab-bar-bg: #3d4455;
+            --tab-text: #ced6e0;
+            --tab-active: #a4b0be;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            --input-bg: #4b5568;
+            --success-color: #81C784;
+            --theme-name: "gray";
+        }
+
+        /* Chế độ tối hồng */
+        .dark-mode-pink {
+            --primary-color: #fd79a8;
+            --primary-light: #ff9ff3;
+            --bg-color: #341f3a;
+            --text-color: #fde8e9;
+            --card-bg: #4a2c4f;
+            --border-color: #7d5a7d;
+            --tab-bar-bg: #4a2c4f;
+            --tab-text: #f8c3d0;
+            --tab-active: #fd79a8;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            --input-bg: #5a3a5f;
+            --success-color: #81C784;
+            --theme-name: "pink";
+        }
+
+        /* Chế độ tối vàng nhạt */
+        .dark-mode-yellow {
+            --primary-color: #fdcb6e;
+            --primary-light: #ffeaa7;
+            --bg-color: #3d3b3a;
+            --text-color: #fffde7;
+            --card-bg: #4d4b4a;
+            --border-color: #6d6b6a;
+            --tab-bar-bg: #4d4b4a;
+            --tab-text: #e6e2d3;
+            --tab-active: #fdcb6e;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            --input-bg: #5d5b5a;
+            --success-color: #81C784;
+            --theme-name: "yellow";
+        }
+
+        /* Custom background mode */
+        .custom-bg-mode {
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --tab-bar-bg: rgba(255, 255, 255, 0.9);
+            --input-bg: rgba(245, 245, 245, 0.9);
+        }
+
+        .dark-mode.custom-bg-mode {
+            --card-bg: rgba(30, 30, 30, 0.9);
+            --tab-bar-bg: rgba(30, 30, 30, 0.9);
+            --input-bg: rgba(45, 45, 45, 0.9);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, transform 0.2s ease;
+        }
+        
+        body {
+            background: var(--bg-color);
+            color: var(--text-color);
+            overflow-x: hidden;
+            background-image: var(--background-image);
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+        }
+        
+        /* Content Container */
+        .content-container {
+            width: 100%;
+            height: calc(100vh - 80px);
+            overflow-y: auto;
+            padding: 20px;
+            scroll-behavior: smooth;
+        }
+        
+        /* Tab Bar */
+        .tab-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            display: flex;
+            background: var(--tab-bar-bg);
+            border-top: 1px solid var(--border-color);
+            padding: 12px 0;
+            box-shadow: var(--shadow);
+            z-index: 100;
+            backdrop-filter: blur(5px);
+        }
+        
+        .tab-item {
+            flex: 1;
+            text-align: center;
+            padding: 10px 0;
+            cursor: pointer;
+            border-radius: 0;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .tab-item.active {
+            transform: translateY(-8px);
+        }
+        
+        .tab-item.active .tab-icon-container {
+            transform: scale(1.1);
+            background: var(--primary-color);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+        
+        .tab-icon-container {
+            width: 50px;
+            height: 50px;
+            margin: 0 auto 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 14px;
+            background: var(--input-bg);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .tab-item img {
+            width: 28px;
+            height: 28px;
+            filter: brightness(0.9);
+        }
+        
+        .tab-item.active img {
+            filter: brightness(1.2);
+        }
+        
+        .tab-item span {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--tab-text);
+            display: block;
+        }
+        
+        .tab-item.active span {
+            color: var(--tab-active);
+            font-weight: 600;
+        }
+        
+        /* Tab Content */
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.4s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        /* Typography */
+        h1, h2 {
+            color: var(--text-color);
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+        
+        h1 {
+            font-size: 28px;
+        }
+        
+        h2 {
+            font-size: 22px;
+        }
+        
+        p {
+            color: var(--text-color);
+            opacity: 0.9;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+        
+        /* Video Section */
+        .video-section {
+            margin: 30px 0;
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 20px;
+        }
+        
+        .video-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+        
+        .video-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+        }
+        
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        /* Link Section */
+        .link-section {
+            margin: 30px 0;
+        }
+        
+        .link-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 20px;
+        }
+        
+        .link-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            backdrop-filter: blur(5px);
+        }
+        
+        .link-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .link-icon {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 12px;
+            margin-right: 15px;
+            background: var(--input-bg);
+            padding: 10px;
+        }
+        
+        .link-title {
+            font-weight: 700;
+            font-size: 18px;
+            color: var(--text-color);
+            margin-bottom: 5px;
+        }
+        
+        .link-url {
+            color: var(--tab-text);
+            font-size: 14px;
+            opacity: 0.8;
+            word-break: break-all;
+            margin-bottom: 20px;
+        }
+        
+        .action-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: auto;
+        }
+        
+        .action-btn {
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+        
+        .download-btn {
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        .download-btn:hover {
+            background: var(--primary-light);
+            transform: translateY(-2px);
+        }
+        
+        .copy-btn {
+            background: var(--input-bg);
+            color: var(--text-color);
+        }
+        
+        .copy-btn:hover {
+            background: var(--border-color);
+            transform: translateY(-2px);
+        }
+        
+        /* Settings Section */
+        .settings-section {
+            margin: 30px 0;
+        }
+        
+        .setting-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(5px);
+        }
+        
+        .setting-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .setting-icon {
+            width: 24px;
+            height: 24px;
+            margin-right: 12px;
+        }
+        
+        .setting-title {
+            font-weight: 700;
+            font-size: 18px;
+            color: var(--text-color);
+        }
+        
+        /* Theme Selector */
+        .theme-selector {
+            margin-top: 20px;
+        }
+        
+        .theme-options {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .theme-option {
+            height: 40px;
+            border-radius: 8px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.2s ease;
+        }
+        
+        .theme-option:hover {
+            transform: scale(1.05);
+        }
+        
+        .theme-option.active {
+            border-color: var(--text-color);
+        }
+        
+        /* Color Themes */
+        .theme-red { background: linear-gradient(135deg, #ff4757 50%, #121212 50%); }
+        .theme-blue { background: linear-gradient(135deg, #4b7bec 50%, #0a192f 50%); }
+        .theme-purple { background: linear-gradient(135deg, #9c88ff 50%, #1a1a2e 50%); }
+        .theme-teal { background: linear-gradient(135deg, #00cec9 50%, #0d324d 50%); }
+        .theme-gray { background: linear-gradient(135deg, #a4b0be 50%, #2f3542 50%); }
+        .theme-pink { background: linear-gradient(135deg, #fd79a8 50%, #341f3a 50%); }
+        .theme-yellow { background: linear-gradient(135deg, #fdcb6e 50%, #3d3b3a 50%); }
+        
+        /* Language Selector */
+        .language-selector {
+            position: relative;
+            width: 100%;
+        }
+        
+        .language-btn {
+            width: 100%;
+            padding: 16px;
+            background: var(--input-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            text-align: left;
+            font-size: 16px;
+            color: var(--text-color);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .language-options {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            margin-top: 8px;
+            overflow: hidden;
+            z-index: 10;
+            display: none;
+            box-shadow: var(--shadow);
+        }
+        
+        .language-option {
+            padding: 14px 16px;
+            color: var(--text-color);
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .language-option:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        /* Toggle Switch */
+        .toggle-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+        }
+        
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+        
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .toggle-slider {
+            background-color: var(--primary-color);
+        }
+        
+        input:checked + .toggle-slider:before {
+            transform: translateX(26px);
+        }
+        
+        /* Background Image Upload */
+        .bg-upload-container {
+            margin-top: 15px;
+        }
+        
+        .bg-upload-btn {
+            width: 100%;
+            padding: 12px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+        
+        .bg-upload-btn:hover {
+            background: var(--primary-light);
+            transform: translateY(-2px);
+        }
+        
+        .bg-upload-btn img {
+            width: 20px;
+            height: 20px;
+            margin-right: 8px;
+            filter: brightness(0) invert(1);
+        }
+        
+        .bg-preview {
+            width: 100%;
+            height: 150px;
+            margin-top: 15px;
+            border-radius: 8px;
+            background-size: cover;
+            background-position: center;
+            border: 2px dashed var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        
+        .bg-preview-text {
+            color: var(--text-color);
+            text-align: center;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 8px;
+        }
+        
+        .remove-bg-btn {
+            margin-top: 10px;
+            width: 100%;
+            padding: 10px;
+            background: var(--input-bg);
+            color: var(--text-color);
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: none;
+        }
+        
+        .remove-bg-btn:hover {
+            background: var(--border-color);
+        }
+        
+        /* Save Button */
+        .save-btn {
+            width: 100%;
+            padding: 16px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 30px;
+            transition: all 0.2s ease;
+        }
+        
+        .save-btn:hover {
+            background-color: var(--primary-light);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            background: var(--card-bg);
+            border-radius: 12px;
+            border: 1px dashed var(--border-color);
+            margin-top: 30px;
+            backdrop-filter: blur(5px);
+        }
+        
+        .empty-icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+            color: var(--tab-text);
+            opacity: 0.5;
+        }
+        
+        .empty-text {
+            color: var(--tab-text);
+            font-size: 16px;
+        }
+        
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--success-color);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .toast.show {
+            opacity: 1;
+        }
+        
+        /* Hidden elements */
+        .hidden {
+            display: none;
+        }
+        
+        #bg-image-input {
+            display: none;
+        }
+
+        /* New Sync Button Styles */
+        .sync-btn {
+            position: fixed;
+            right: 20px;
+            bottom: 100px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            z-index: 100;
+            transition: all 0.3s ease;
+        }
+
+        .sync-btn:hover {
+            transform: scale(1.1);
+            background: var(--primary-light);
+        }
+
+        .sync-btn img {
+            width: 30px;
+            height: 30px;
+            filter: brightness(0) invert(1);
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            border-radius: 12px;
+            width: 90%;
+            max-width: 500px;
+            padding: 20px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-color);
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--text-color);
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: var(--input-bg);
+            color: var(--text-color);
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-light);
+        }
+
+        .btn-secondary {
+            background: var(--input-bg);
+            color: var(--text-color);
+            border: none;
+            margin-right: 10px;
+        }
+
+        .btn-secondary:hover {
+            background: var(--border-color);
+        }
+
+        /* Password Modal */
+        .password-status {
+            margin-top: 10px;
+            font-size: 14px;
+            text-align: center;
+            display: none;
+        }
+
+        .password-success {
+            color: var(--success-color);
+        }
+
+        .password-error {
+            color: var(--primary-color);
+        }
+
+        /* Tab Selection */
+        .tab-selector {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .tab-selector-btn {
+            padding: 10px 20px;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            font-weight: 600;
+        }
+
+        .tab-selector-btn.active {
+            border-bottom: 2px solid var(--primary-color);
+            color: var(--primary-color);
+        }
+    </style>
+</head>
+<body>
+    <div id="content-container" class="content-container">
+        <!-- Home Tab -->
+        <div id="home-content" class="tab-content active">
+            <h1 data-i18n="home_title">Trang Chủ</h1>
+            <p data-i18n="home_subtitle">Chào mừng bạn đến với UgPhone - VPN & Gaming</p>
+            
+            <div class="video-section">
+                <div class="section-header">
+                    <h2 data-i18n="featured_videos">Video Nổi Bật</h2>
+                </div>
+                <div id="video-grid" class="video-grid"></div>
+                <div id="no-videos" class="empty-state" style="display: none;">
+                    <div class="empty-icon">📹</div>
+                    <div class="empty-text" data-i18n="no_videos">Không có video nào</div>
+                </div>
+            </div>
+            
+            <div class="video-section">
+                <div class="section-header">
+                    <h2 data-i18n="hot_games">Game Hot</h2>
+                </div>
+                <div id="game-grid" class="video-grid"></div>
+                <div id="no-games" class="empty-state" style="display: none;">
+                    <div class="empty-icon">🎮</div>
+                    <div class="empty-text" data-i18n="no_games">Không có game nào</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Links Tab -->
+        <div id="explore-content" class="tab-content">
+            <h1 data-i18n="links_title">Liên Kết Hữu Ích</h1>
+            <p data-i18n="links_subtitle">Các liên kết được đề xuất cho bạn</p>
+            
+            <div class="link-section">
+                <div id="link-grid" class="link-grid"></div>
+                <div id="no-links" class="empty-state" style="display: none;">
+                    <div class="empty-icon">🔗</div>
+                    <div class="empty-text" data-i18n="no_links">Không có liên kết nào</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Settings Tab -->
+        <div id="settings-content" class="tab-content">
+            <h1 data-i18n="settings_title">Cài Đặt</h1>
+            <p data-i18n="settings_subtitle">Tùy chỉnh ứng dụng theo ý thích của bạn</p>
+            
+            <div class="settings-section">
+                <div class="setting-card">
+                    <div class="setting-header">
+                        <img src="https://i.imgur.com/WhQ50sV.png" class="setting-icon" alt="Theme">
+                        <div class="setting-title" data-i18n="theme">Giao diện</div>
+                    </div>
+                    <div class="theme-selector">
+                        <p data-i18n="theme_desc">Chọn màu giao diện yêu thích</p>
+                        <div class="theme-options">
+                            <div class="theme-option theme-red active" data-theme="red"></div>
+                            <div class="theme-option theme-blue" data-theme="blue"></div>
+                            <div class="theme-option theme-purple" data-theme="purple"></div>
+                            <div class="theme-option theme-teal" data-theme="teal"></div>
+                            <div class="theme-option theme-gray" data-theme="gray"></div>
+                            <div class="theme-option theme-pink" data-theme="pink"></div>
+                            <div class="theme-option theme-yellow" data-theme="yellow"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="setting-card">
+                    <div class="setting-header">
+                        <img src="https://i.imgur.com/WhQ50sV.png" class="setting-icon" alt="Dark Mode">
+                        <div class="setting-title" data-i18n="dark_mode">Chế độ tối</div>
+                    </div>
+                    <div class="toggle-container">
+                        <span data-i18n="dark_mode_desc">Bật chế độ tối để bảo vệ mắt</span>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="dark-mode-toggle">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="setting-card">
+                    <div class="setting-header">
+                        <img src="https://i.imgur.com/WhQ50sV.png" class="setting-icon" alt="Background">
+                        <div class="setting-title" data-i18n="background_image">Hình nền</div>
+                    </div>
+                    <div class="bg-upload-container">
+                        <p data-i18n="background_image_desc">Chọn hình nền từ thiết bị của bạn</p>
+                        <button class="bg-upload-btn" id="bg-upload-btn">
+                            <img src="https://cdn-icons-png.flaticon.com/512/2965/2965300.png" alt="Upload">
+                            <span data-i18n="choose_background">Chọn hình nền</span>
+                        </button>
+                        <div class="bg-preview" id="bg-preview">
+                            <div class="bg-preview-text" data-i18n="no_background">Không có hình nền</div>
+                        </div>
+                        <button class="remove-bg-btn" id="remove-bg-btn" data-i18n="remove_background">Xóa hình nền</button>
+                        <input type="file" id="bg-image-input" accept="image/*">
+                    </div>
+                </div>
+                
+                <div class="setting-card">
+                    <div class="setting-header">
+                        <img src="https://i.imgur.com/WhQ50sV.png" class="setting-icon" alt="Language">
+                        <div class="setting-title" data-i18n="language">Ngôn ngữ</div>
+                    </div>
+                    <div class="language-selector">
+                        <button class="language-btn" id="language-btn">
+                            <span id="selected-language">Tiếng Việt</span>
+                            <span>▼</span>
+                        </button>
+                        <div class="language-options" id="language-options">
+                            <div class="language-option" data-lang="vi">Tiếng Việt</div>
+                            <div class="language-option" data-lang="en">English</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="save-btn" id="save-settings" data-i18n="save_settings">Lưu Cài Đặt</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Tab Bar -->
+    <div class="tab-bar">
+        <div class="tab-item active" onclick="openTab('home', this)" data-tab="home">
+            <div class="tab-icon-container">
+                <img src="https://i.imgur.com/gPPZf93.png" alt="Home">
+            </div>
+            <span data-i18n="tab_home">Trang Chủ</span>
+        </div>
+        <div class="tab-item" onclick="openTab('explore', this)" data-tab="explore">
+            <div class="tab-icon-container">
+                <img src="https://cdn-icons-png.flaticon.com/512/4555/4555971.png" alt="Links">
+            </div>
+            <span data-i18n="tab_links">Liên Kết</span>
+        </div>
+        <div class="tab-item" onclick="openTab('settings', this)" data-tab="settings">
+            <div class="tab-icon-container">
+                <img src="https://i.imgur.com/WhQ50sV.png" alt="Settings">
+            </div>
+            <span data-i18n="tab_settings">Cài Đặt</span>
+        </div>
+    </div>
+
+    <!-- Sync Button -->
+    <div class="sync-btn" id="sync-btn">
+        <img src="https://cdn-icons-png.flaticon.com/512/2961/2961937.png" alt="Sync">
+    </div>
+    
+    <!-- Password Modal -->
+    <div class="modal" id="password-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title" data-i18n="password_required">Nhập mật khẩu</div>
+                <button class="close-btn" id="close-password-modal">&times;</button>
+            </div>
+            <div class="form-group">
+                <label for="password-input" data-i18n="enter_password">Nhập mật khẩu:</label>
+                <input type="password" id="password-input" class="form-control">
+                <div id="password-status" class="password-status"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="cancel-password" data-i18n="cancel">Hủy</button>
+                <button class="btn btn-primary" id="submit-password" data-i18n="submit">Xác nhận</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Modal -->
+    <div class="modal" id="admin-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title" data-i18n="admin_panel">Quản trị</div>
+                <button class="close-btn" id="close-admin-modal">&times;</button>
+            </div>
+            
+            <div class="tab-selector">
+                <div class="tab-selector-btn active" data-tab="video">Thêm Video</div>
+                <div class="tab-selector-btn" data-tab="link">Thêm Liên Kết</div>
+            </div>
+            
+            <!-- Video Tab -->
+            <div id="video-tab-content" class="tab-content active">
+                <div class="form-group">
+                    <label for="video-url" data-i18n="video_url">URL Video YouTube (Embed):</label>
+                    <input type="text" id="video-url" class="form-control" placeholder="https://www.youtube.com/embed/...">
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" id="add-video-btn" data-i18n="add_video">Thêm Video</button>
+                </div>
+            </div>
+            
+            <!-- Link Tab -->
+            <div id="link-tab-content" class="tab-content">
+                <div class="form-group">
+                    <label for="link-title" data-i18n="link_title">Tiêu đề:</label>
+                    <input type="text" id="link-title" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="link-url" data-i18n="link_url">URL:</label>
+                    <input type="text" id="link-url" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="link-icon" data-i18n="link_icon">URL Icon:</label>
+                    <input type="text" id="link-icon" class="form-control">
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" id="add-link-btn" data-i18n="add_link">Thêm Liên Kết</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Toast Notification -->
+    <div id="toast" class="toast"></div>
+
+    <script>
+        // Language translations
+        const translations = {
+            vi: {
+                home_title: "Trang Chủ",
+                home_subtitle: "Chào mừng bạn đến với UgPhone - VPN & Gaming",
+                featured_videos: "Video Nổi Bật",
+                hot_games: "Game Hot",
+                links_title: "Liên Kết Hữu Ích",
+                links_subtitle: "Các liên kết được đề xuất cho bạn",
+                settings_title: "Cài Đặt",
+                settings_subtitle: "Tùy chỉnh ứng dụng theo ý thích của bạn",
+                theme: "Giao diện",
+                theme_desc: "Chọn màu giao diện yêu thích",
+                dark_mode: "Chế độ tối",
+                dark_mode_desc: "Bật chế độ tối để bảo vệ mắt",
+                background_image: "Hình nền",
+                background_image_desc: "Chọn hình nền từ thiết bị của bạn",
+                choose_background: "Chọn hình nền",
+                remove_background: "Xóa hình nền",
+                no_background: "Không có hình nền",
+                language: "Ngôn ngữ",
+                save_settings: "Lưu Cài Đặt",
+                tab_home: "Trang Chủ",
+                tab_links: "Liên Kết",
+                tab_settings: "Cài Đặt",
+                no_videos: "Không có video nào",
+                no_games: "Không có game nào",
+                no_links: "Không có liên kết nào",
+                download: "Tải xuống",
+                copy_link: "Sao chép",
+                copied: "Đã sao chép!",
+                settings_saved: "Đã lưu cài đặt!",
+                password_required: "Nhập mật khẩu",
+                enter_password: "Nhập mật khẩu:",
+                cancel: "Hủy",
+                submit: "Xác nhận",
+                admin_panel: "Quản trị",
+                video_url: "URL Video YouTube (Embed):",
+                add_video: "Thêm Video",
+                link_title: "Tiêu đề:",
+                link_url: "URL:",
+                link_icon: "URL Icon:",
+                add_link: "Thêm Liên Kết",
+                password_correct: "Mật khẩu chính xác!",
+                password_incorrect: "Mật khẩu không đúng!",
+                video_added: "Đã thêm video!",
+                link_added: "Đã thêm liên kết!",
+                sync_success: "Đồng bộ thành công!",
+                sync_error: "Lỗi đồng bộ!",
+                required_field: "là bắt buộc",
+                invalid_video_url: "URL video không hợp lệ (phải là embed URL)",
+                video_exists: "Video đã tồn tại",
+                all_fields_required: "Vui lòng điền đầy đủ thông tin",
+                invalid_url_format: "URL không đúng định dạng",
+                link_exists: "Liên kết đã tồn tại"
+            },
+            en: {
+                home_title: "Home",
+                home_subtitle: "Welcome to UgPhone - VPN & Gaming",
+                featured_videos: "Featured Videos",
+                hot_games: "Hot Games",
+                links_title: "Useful Links",
+                links_subtitle: "Recommended links for you",
+                settings_title: "Settings",
+                settings_subtitle: "Customize the app to your liking",
+                theme: "Theme",
+                theme_desc: "Choose your favorite color theme",
+                dark_mode: "Dark Mode",
+                dark_mode_desc: "Enable dark mode to protect your eyes",
+                background_image: "Background Image",
+                background_image_desc: "Choose a background from your device",
+                choose_background: "Choose Background",
+                remove_background: "Remove Background",
+                no_background: "No background selected",
+                language: "Language",
+                save_settings: "Save Settings",
+                tab_home: "Home",
+                tab_links: "Links",
+                tab_settings: "Settings",
+                no_videos: "No videos available",
+                no_games: "No games available",
+                no_links: "No links available",
+                download: "Download",
+                copy_link: "Copy Link",
+                copied: "Copied!",
+                settings_saved: "Settings saved!",
+                password_required: "Password Required",
+                enter_password: "Enter password:",
+                cancel: "Cancel",
+                submit: "Submit",
+                admin_panel: "Admin Panel",
+                video_url: "YouTube Video URL (Embed):",
+                add_video: "Add Video",
+                link_title: "Title:",
+                link_url: "URL:",
+                link_icon: "Icon URL:",
+                add_link: "Add Link",
+                password_correct: "Password correct!",
+                password_incorrect: "Incorrect password!",
+                video_added: "Video added!",
+                link_added: "Link added!",
+                sync_success: "Sync successful!",
+                sync_error: "Sync error!",
+                required_field: "is required",
+                invalid_video_url: "Invalid video URL (must be embed URL)",
+                video_exists: "Video already exists",
+                all_fields_required: "Please fill all fields",
+                invalid_url_format: "Invalid URL format",
+                link_exists: "Link already exists"
+            }
+        };
+
+        // GitHub configuration
+        const githubConfig = {
+            USERNAME: "phamlong6677t-create",
+            REPO: "TFLv2",
+            TOKEN: "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",
+            FILE_PATH: "game.json",
+            get API_URL() {
+                return `https://api.github.com/repos/${this.USERNAME}/${this.REPO}/contents/${this.FILE_PATH}`;
+            }
+        };
+
+        // Load saved settings
+        function loadSettings() {
+            // Dark Mode
+            const darkMode = localStorage.getItem('darkMode') === 'true';
+            document.getElementById('dark-mode-toggle').checked = darkMode;
+            toggleDarkMode(darkMode);
+            
+            // Language
+            const language = localStorage.getItem('language') || 'vi';
+            changeLanguage(language);
+            document.getElementById('selected-language').textContent = 
+                language === 'vi' ? 'Tiếng Việt' : 'English';
+            
+            // Theme
+            const savedTheme = localStorage.getItem('theme') || 'red';
+            changeTheme(savedTheme);
+            document.querySelector(`.theme-option[data-theme="${savedTheme}"]`).classList.add('active');
+            
+            // Background Image
+            const savedBgImage = localStorage.getItem('backgroundImage');
+            if (savedBgImage) {
+                document.documentElement.style.setProperty('--background-image', `url(${savedBgImage})`);
+                document.getElementById('bg-preview').style.backgroundImage = `url(${savedBgImage})`;
+                document.getElementById('bg-preview').innerHTML = '';
+                document.getElementById('remove-bg-btn').style.display = 'block';
+                document.body.classList.add('custom-bg-mode');
+            }
+        }
+
+        // Toggle Dark Mode
+        function toggleDarkMode(enable) {
+            const currentTheme = localStorage.getItem('theme') || 'red';
+            if (document.body.classList.contains('custom-bg-mode')) {
+                document.body.className = enable ? 'dark-mode custom-bg-mode' : 'custom-bg-mode';
+            } else {
+                document.body.className = enable ? `dark-mode-${currentTheme}` : '';
+            }
+            localStorage.setItem('darkMode', enable);
+        }
+
+        // Change Theme
+        function changeTheme(theme) {
+            const isDarkMode = localStorage.getItem('darkMode') === 'true';
+            if (!document.body.classList.contains('custom-bg-mode')) {
+                document.body.className = isDarkMode ? `dark-mode-${theme}` : '';
+                localStorage.setItem('theme', theme);
+            }
+            
+            // Update active theme in UI
+            document.querySelectorAll('.theme-option').forEach(option => {
+                option.classList.remove('active');
+            });
+            document.querySelector(`.theme-option[data-theme="${theme}"]`).classList.add('active');
+        }
+
+        // Change Language
+        function changeLanguage(lang) {
+            const elements = document.querySelectorAll('[data-i18n]');
+            elements.forEach(element => {
+                const key = element.getAttribute('data-i18n');
+                if (translations[lang] && translations[lang][key]) {
+                    element.textContent = translations[lang][key];
+                }
+            });
+            localStorage.setItem('language', lang);
+        }
+
+        // Show Toast Notification
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Copy to Clipboard
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                const currentLang = localStorage.getItem('language') || 'vi';
+                showToast(translations[currentLang].copied);
+            });
+        }
+
+        // Tab Switching
+        function openTab(tabId, element) {
+            const container = document.getElementById('content-container');
+            
+            document.querySelectorAll('.tab-item').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            element.classList.add('active');
+            
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            document.getElementById(tabId + '-content').classList.add('active');
+        }
+
+        // Handle background image upload
+        function setupBackgroundImageUpload() {
+            const bgUploadBtn = document.getElementById('bg-upload-btn');
+            const bgImageInput = document.getElementById('bg-image-input');
+            const bgPreview = document.getElementById('bg-preview');
+            const removeBgBtn = document.getElementById('remove-bg-btn');
+            
+            bgUploadBtn.addEventListener('click', () => {
+                bgImageInput.click();
+            });
+            
+            bgImageInput.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (event) => {
+                        const imageUrl = event.target.result;
+                        
+                        // Apply the background image
+                        document.documentElement.style.setProperty('--background-image', `url(${imageUrl})`);
+                        bgPreview.style.backgroundImage = `url(${imageUrl})`;
+                        bgPreview.innerHTML = '';
+                        removeBgBtn.style.display = 'block';
+                        
+                        // Add custom background mode class
+                        document.body.classList.add('custom-bg-mode');
+                        
+                        // Save to local storage
+                        localStorage.setItem('backgroundImage', imageUrl);
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+            
+            removeBgBtn.addEventListener('click', () => {
+                // Remove background image
+                document.documentElement.style.setProperty('--background-image', 'none');
+                bgPreview.style.backgroundImage = '';
+                bgPreview.innerHTML = '<div class="bg-preview-text" data-i18n="no_background">Không có hình nền</div>';
+                removeBgBtn.style.display = 'none';
+                
+                // Remove custom background mode class
+                document.body.classList.remove('custom-bg-mode');
+                
+                // Remove from local storage
+                localStorage.removeItem('backgroundImage');
+                
+                // Update translations for the preview text
+                const currentLang = localStorage.getItem('language') || 'vi';
+                changeLanguage(currentLang);
+            });
+        }
+
+        // Open Links in Browser
+        function openInChrome(url) {
+            if (navigator.userAgent.match(/Android/i)) {
+                window.open(url, '_system');
+            } else {
+                window.open(url, '_blank');
+            }
+        }
+
+        // Sync data with GitHub
+        async function syncWithGitHub(newData) {
+            try {
+                // First get the current file to get its SHA
+                const response = await fetch(githubConfig.API_URL, {
+                    headers: {
+                        'Authorization': `Bearer ${githubConfig.TOKEN}`,
+                        'Accept': 'application/vnd.github.v3+json'
+                    }
+                });
+                
+                let sha = null;
+                if (response.ok) {
+                    const fileData = await response.json();
+                    sha = fileData.sha;
+                }
+                
+                // Update the file
+                const updateResponse = await fetch(githubConfig.API_URL, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Bearer ${githubConfig.TOKEN}`,
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/vnd.github.v3+json'
+                    },
+                    body: JSON.stringify({
+                        message: `Update game data - ${new Date().toISOString()}`,
+                        content: btoa(unescape(encodeURIComponent(JSON.stringify(newData)))),
+                        sha: sha
+                    })
+                });
+                
+                if (updateResponse.ok) {
+                    const currentLang = localStorage.getItem('language') || 'vi';
+                    showToast(translations[currentLang].sync_success);
+                    return true;
+                } else {
+                    throw new Error('Failed to update file');
+                }
+            } catch (error) {
+                console.error('Error syncing with GitHub:', error);
+                const currentLang = localStorage.getItem('language') || 'vi';
+                showToast(translations[currentLang].sync_error);
+                return false;
+            }
+        }
+
+        // Initialize Settings
+        document.addEventListener('DOMContentLoaded', function() {
+            loadSettings();
+            
+            // Setup background image upload
+            setupBackgroundImageUpload();
+            
+            // Dark Mode Toggle
+            document.getElementById('dark-mode-toggle').addEventListener('change', function() {
+                toggleDarkMode(this.checked);
+            });
+            
+            // Theme Selection
+            document.querySelectorAll('.theme-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    const theme = this.getAttribute('data-theme');
+                    changeTheme(theme);
+                });
+            });
+            
+            // Language Selector
+            document.getElementById('language-btn').addEventListener('click', function() {
+                const options = document.getElementById('language-options');
+                options.style.display = options.style.display === 'block' ? 'none' : 'block';
+            });
+            
+            document.querySelectorAll('.language-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    const lang = this.getAttribute('data-lang');
+                    document.getElementById('selected-language').textContent = 
+                        lang === 'vi' ? 'Tiếng Việt' : 'English';
+                    document.getElementById('language-options').style.display = 'none';
+                    changeLanguage(lang);
+                });
+            });
+            
+            // Save Settings
+            document.getElementById('save-settings').addEventListener('click', function() {
+                const selectedLang = document.getElementById('selected-language').textContent === 'Tiếng Việt' ? 'vi' : 'en';
+                changeLanguage(selectedLang);
+                
+                // Show success message
+                showToast(translations[selectedLang].settings_saved);
+            });
+            
+            // Close language dropdown when clicking outside
+            document.addEventListener('click', function(event) {
+                if (!event.target.closest('.language-selector')) {
+                    document.getElementById('language-options').style.display = 'none';
+                }
+            });
+
+            // Sync Button
+            document.getElementById('sync-btn').addEventListener('click', function() {
+                document.getElementById('password-modal').style.display = 'flex';
+            });
+
+            // Password Modal
+            document.getElementById('close-password-modal').addEventListener('click', function() {
+                document.getElementById('password-modal').style.display = 'none';
+            });
+
+            document.getElementById('cancel-password').addEventListener('click', function() {
+                document.getElementById('password-modal').style.display = 'none';
+            });
+
+            document.getElementById('submit-password').addEventListener('click', function() {
+                const password = document.getElementById('password-input').value;
+                const currentLang = localStorage.getItem('language') || 'vi';
+                const passwordStatus = document.getElementById('password-status');
+                
+                if (password === "TFL") {
+                    passwordStatus.textContent = translations[currentLang].password_correct;
+                    passwordStatus.className = "password-status password-success";
+                    passwordStatus.style.display = "block";
+                    
+                    setTimeout(() => {
+                        document.getElementById('password-modal').style.display = 'none';
+                        document.getElementById('admin-modal').style.display = 'flex';
+                        document.getElementById('password-input').value = '';
+                        passwordStatus.style.display = "none";
+                    }, 1000);
+                } else {
+                    passwordStatus.textContent = translations[currentLang].password_incorrect;
+                    passwordStatus.className = "password-status password-error";
+                    passwordStatus.style.display = "block";
+                }
+            });
+
+            // Admin Modal
+            document.getElementById('close-admin-modal').addEventListener('click', function() {
+                document.getElementById('admin-modal').style.display = 'none';
+            });
+
+            // Tab switching in admin modal
+            document.querySelectorAll('.tab-selector-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const tab = this.getAttribute('data-tab');
+                    
+                    // Update active tab
+                    document.querySelectorAll('.tab-selector-btn').forEach(t => {
+                        t.classList.remove('active');
+                    });
+                    this.classList.add('active');
+                    
+                    // Show correct content
+                    document.querySelectorAll('#admin-modal .tab-content').forEach(content => {
+                        content.classList.remove('active');
+                    });
+                    document.getElementById(`${tab}-tab-content`).classList.add('active');
+                });
+            });
+
+            // Add Video - Fixed version
+            document.getElementById('add-video-btn').addEventListener('click', async function() {
+                const videoUrl = document.getElementById('video-url').value.trim();
+                const currentLang = localStorage.getItem('language') || 'vi';
+                
+                if (!videoUrl) {
+                    showToast(translations[currentLang].video_url + " " + translations[currentLang].required_field);
+                    return;
+                }
+                
+                try {
+                    // Validate YouTube embed URL format
+                    if (!videoUrl.includes('youtube.com/embed/') && !videoUrl.includes('youtu.be/')) {
+                        showToast(translations[currentLang].invalid_video_url);
+                        return;
+                    }
+                    
+                    // Load current data
+                    const response = await fetch('game.json');
+                    if (!response.ok) throw new Error('Failed to load game data');
+                    
+                    const data = await response.json();
+                    
+                    // Initialize videos array if not exists
+                    if (!data.home) data.home = {};
+                    if (!data.home.embedVideos) data.home.embedVideos = [];
+                    
+                    // Check for duplicate
+                    if (data.home.embedVideos.includes(videoUrl)) {
+                        showToast(translations[currentLang].video_exists);
+                        return;
+                    }
+                    
+                    // Add new video
+                    data.home.embedVideos.push(videoUrl);
+                    
+                    // Sync with GitHub
+                    const success = await syncWithGitHub(data);
+                    if (success) {
+                        showToast(translations[currentLang].video_added);
+                        document.getElementById('admin-modal').style.display = 'none';
+                        document.getElementById('video-url').value = '';
+                        
+                        // Reload the page to show changes
+                        setTimeout(() => location.reload(), 1000);
+                    }
+                } catch (error) {
+                    console.error('Error adding video:', error);
+                    showToast(translations[currentLang].sync_error);
+                }
+            });
+
+            // Add Link - Fixed version
+            document.getElementById('add-link-btn').addEventListener('click', async function() {
+                const title = document.getElementById('link-title').value.trim();
+                const url = document.getElementById('link-url').value.trim();
+                const icon = document.getElementById('link-icon').value.trim();
+                const currentLang = localStorage.getItem('language') || 'vi';
+                
+                // Validate inputs
+                if (!title || !url || !icon) {
+                    showToast(translations[currentLang].all_fields_required);
+                    return;
+                }
+                
+                // Validate URL format
+                try {
+                    new URL(url);
+                    new URL(icon);
+                } catch (e) {
+                    showToast(translations[currentLang].invalid_url_format);
+                    return;
+                }
+                
+                try {
+                    // Load current data
+                    const response = await fetch('game.json');
+                    if (!response.ok) throw new Error('Failed to load game data');
+                    
+                    const data = await response.json();
+                    
+                    // Initialize links array if not exists
+                    if (!data.links) data.links = [];
+                    
+                    // Check for duplicate URL
+                    if (data.links.some(link => link.url === url)) {
+                        showToast(translations[currentLang].link_exists);
+                        return;
+                    }
+                    
+                    // Add new link
+                    data.links.push({
+                        title: title,
+                        url: url,
+                        icon: icon
+                    });
+                    
+                    // Sync with GitHub
+                    const success = await syncWithGitHub(data);
+                    if (success) {
+                        showToast(translations[currentLang].link_added);
+                        document.getElementById('admin-modal').style.display = 'none';
+                        
+                        // Reset form
+                        document.getElementById('link-title').value = '';
+                        document.getElementById('link-url').value = '';
+                        document.getElementById('link-icon').value = '';
+                        
+                        // Reload the page to show changes
+                        setTimeout(() => location.reload(), 1000);
+                    }
+                } catch (error) {
+                    console.error('Error adding link:', error);
+                    showToast(translations[currentLang].sync_error);
+                }
+            });
+
+            // Load Data from game.json
+            fetch('game.json')
+                .then(response => response.json())
+                .then(data => {
+                    // Videos
+                    const videoGrid = document.getElementById('video-grid');
+                    const noVideos = document.getElementById('no-videos');
+                    
+                    if (data.home?.embedVideos?.length > 0) {
+                        data.home.embedVideos.forEach(videoUrl => {
+                            const videoCard = document.createElement('div');
+                            videoCard.className = 'video-card';
+                            videoCard.innerHTML = `
+                                <div class="video-container">
+                                    <iframe src="${videoUrl}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                </div>
+                            `;
+                            videoGrid.appendChild(videoCard);
+                        });
+                    } else {
+                        noVideos.style.display = 'block';
+                    }
+
+                    // Games
+                    const gameGrid = document.getElementById('game-grid');
+                    const noGames = document.getElementById('no-games');
+                    
+                    if (data.home?.featuredGames?.length > 0) {
+                        data.home.featuredGames.forEach(game => {
+                            if (game.title && game.image && game.download) {
+                                const gameCard = document.createElement('div');
+                                gameCard.className = 'link-card';
+                                gameCard.innerHTML = `
+                                    <div class="link-header">
+                                        <img src="${game.image}" class="link-icon" alt="${game.title}" onerror="this.src='https://i.imgur.com/WfKN9iR.png'">
+                                        <div>
+                                            <div class="link-title">${game.title}</div>
+                                        </div>
+                                    </div>
+                                    <div class="action-buttons">
+                                        <button class="action-btn download-btn" onclick="openInChrome('${game.download}')" data-i18n="download">Tải xuống</button>
+                                        <button class="action-btn copy-btn" onclick="copyToClipboard('${game.download}')" data-i18n="copy_link">Sao chép</button>
+                                    </div>
+                                `;
+                                gameGrid.appendChild(gameCard);
+                            }
+                        });
+                    } else {
+                        noGames.style.display = 'block';
+                    }
+
+                    // Links
+                    const linkGrid = document.getElementById('link-grid');
+                    const noLinks = document.getElementById('no-links');
+                    
+                    if (data.links?.length > 0) {
+                        data.links.forEach(link => {
+                            if (link.title && link.url && link.icon) {
+                                const linkCard = document.createElement('div');
+                                linkCard.className = 'link-card';
+                                linkCard.innerHTML = `
+                                    <div class="link-header">
+                                        <img src="${link.icon}" class="link-icon" alt="${link.title}" onerror="this.src='https://i.imgur.com/WfKN9iR.png'">
+                                        <div>
+                                            <div class="link-title">${link.title}</div>
+                                            <div class="link-url">${link.url}</div>
+                                        </div>
+                                    </div>
+                                    <div class="action-buttons">
+                                        <button class="action-btn download-btn" onclick="openInChrome('${link.url}')" data-i18n="download">Truy cập</button>
+                                        <button class="action-btn copy-btn" onclick="copyToClipboard('${link.url}')" data-i18n="copy_link">Sao chép</button>
+                                    </div>
+                                `;
+                                linkGrid.appendChild(linkCard);
+                            }
+                        });
+                        
+                        if (linkGrid.children.length === 0) {
+                            noLinks.style.display = 'block';
+                        }
+                    } else {
+                        noLinks.style.display = 'block';
+                    }
+                    
+                    // Update translations for dynamic content
+                    const currentLang = localStorage.getItem('language') || 'vi';
+                    changeLanguage(currentLang);
+                })
+                .catch(error => {
+                    console.error('Error loading game data:', error);
+                    document.getElementById('no-videos').style.display = 'block';
+                    document.getElementById('no-games').style.display = 'block';
+                    document.getElementById('no-links').style.display = 'block';
+                });
+        });
+    </script>
+</body>
+</html>
