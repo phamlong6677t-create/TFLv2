@@ -2,7 +2,7 @@
 const githubConfig = {
     USERNAME: "phamlong6677t-create",
     REPO: "TFLv2",
-    TOKEN: "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",
+    TOKEN: "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",
     FILE_PATH: "game.json",
     get API_URL() {
         return `https://api.github.com/repos/${this.USERNAME}/${this.REPO}/contents/${this.FILE_PATH}`;
